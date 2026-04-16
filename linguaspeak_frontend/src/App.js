@@ -1,48 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import "./App.css";
+
+import AppShell from "./components/AppShell";
+import CoursesPage from "./pages/CoursesPage";
+import LessonsPage from "./pages/LessonsPage";
+import PracticePage from "./pages/PracticePage";
+import ProgressPage from "./pages/ProgressPage";
+import ProfilePage from "./pages/ProfilePage";
+import AdminPage from "./pages/AdminPage";
 
 // PUBLIC_INTERFACE
 function App() {
-  const [theme, setTheme] = useState('light');
-
-  // Effect to apply theme to document element
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
-
-  // PUBLIC_INTERFACE
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-  };
-
+  /** Root React component that configures client-side routing and the mobile app shell. */
   return (
-    <div className="App">
-      <header className="App-header">
-        <button 
-          className="theme-toggle" 
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        >
-          {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
-        </button>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          Current theme: <strong>{theme}</strong>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppShell>
+      <Routes>
+        <Route path="/" element={<Navigate to="/courses" replace />} />
+        <Route path="/courses" element={<CoursesPage />} />
+        <Route path="/lessons" element={<LessonsPage />} />
+        <Route path="/practice" element={<PracticePage />} />
+        <Route path="/progress" element={<ProgressPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+
+        {/* Admin is intentionally outside the bottom tab bar to keep it separate from learner flow */}
+        <Route path="/admin" element={<AdminPage />} />
+
+        <Route path="*" element={<Navigate to="/courses" replace />} />
+      </Routes>
+    </AppShell>
   );
 }
 
